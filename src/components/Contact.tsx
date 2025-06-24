@@ -22,39 +22,45 @@ const Contact = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  e.preventDefault();
+  setIsSubmitting(true);
 
-    try {
-      // Aqui você implementará a integração com o backend
-      // Por enquanto, vamos simular o envio
-      console.log('Dados do formulário:', formData);
-      
-      // Simular delay de envio
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast({
-        title: "Mensagem enviada com sucesso!",
-        description: "Entraremos em contato em breve.",
-      });
-      
-      // Limpar formulário
-      setFormData({
-        nome: '',
-        email: '',
-        telefone: '',
-        mensagem: ''
-      });
-    } catch (error) {
-      toast({
-        title: "Erro ao enviar mensagem",
-        description: "Tente novamente ou entre em contato por telefone.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+  try {
+    const response = await fetch("https://rivelino-backend.onrender.com", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao enviar formulário");
     }
-  };
+
+    toast({
+      title: "Mensagem enviada com sucesso!",
+      description: "Entraremos em contato em breve.",
+    });
+
+    setFormData({
+      nome: '',
+      email: '',
+      telefone: '',
+      mensagem: ''
+    });
+  } catch (error) {
+    toast({
+      title: "Erro ao enviar mensagem",
+      description: "Tente novamente ou entre em contato por telefone.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
 
   const contactInfo = [
     {
