@@ -76,11 +76,11 @@ const InteractiveServicesWheel = () => {
       {/* Overlay da roda - TOTALMENTE RESPONSIVO */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-2 animate-in fade-in-0 duration-500"
+          className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in-0 duration-500"
           onClick={handleClose}
         >
           <div 
-            className="relative bg-white rounded-3xl w-full h-full max-w-[95vw] max-h-[95vh] min-h-[600px] shadow-2xl animate-in zoom-in-90 slide-in-from-bottom-8 duration-700 ease-out overflow-hidden flex flex-col"
+            className="relative bg-white rounded-3xl w-full h-full max-w-md max-h-[90vh] shadow-2xl animate-in zoom-in-90 slide-in-from-bottom-8 duration-700 ease-out overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Botão de fechar */}
@@ -92,26 +92,26 @@ const InteractiveServicesWheel = () => {
             </button>
 
             {/* Título */}
-            <div className="text-center pt-8 pb-4 px-4 animate-in slide-in-from-top-4 duration-700 delay-200">
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-law-gray-dark mb-3">
+            <div className="text-center pt-8 pb-6 px-4 animate-in slide-in-from-top-4 duration-700 delay-200">
+              <h3 className="text-xl sm:text-2xl font-bold text-law-gray-dark mb-3">
                 Nossos <span className="text-law-wine">Serviços</span>
               </h3>
-              <div className="w-16 sm:w-20 h-1 bg-law-gold mx-auto rounded-full"></div>
+              <div className="w-16 h-1 bg-law-gold mx-auto rounded-full"></div>
             </div>
 
-            {/* Container da roda - CENTRALIZADO E RESPONSIVO */}
+            {/* Container da roda - AJUSTADO PARA MOBILE */}
             <div className="flex-1 flex items-center justify-center p-4">
-              <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[380px] md:h-[380px]">
-                {/* Centro da roda com ícone MAIOR da balança */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-law-gray-dark rounded-full flex items-center justify-center z-10 animate-in zoom-in-50 duration-1000 delay-500 shadow-xl">
-                  <Scale className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-law-gold" />
+              <div className="relative w-[300px] h-[300px]">
+                {/* Centro da roda - FUNDO BRANCO COM ÍCONE DA BALANÇA */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white rounded-full flex items-center justify-center z-10 animate-in zoom-in-50 duration-1000 delay-500 shadow-lg border-2 border-law-gray-medium/20">
+                  <Scale className="h-10 w-10 text-law-wine" />
                 </div>
                 
-                {/* Serviços ao redor */}
+                {/* Serviços ao redor - AJUSTADOS PARA MOBILE */}
                 {services.map((service, index) => {
                   const angle = (index * 60) - 90;
                   const radian = (angle * Math.PI) / 180;
-                  const radius = 110; // Ajustado para o novo tamanho
+                  const radius = 100;
                   const x = Math.cos(radian) * radius;
                   const y = Math.sin(radian) * radius;
                   
@@ -125,23 +125,23 @@ const InteractiveServicesWheel = () => {
                         animationDelay: `${(index * 150) + 700}ms`
                       }}
                     >
-                      <div className={`w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 ${service.color} rounded-full flex items-center justify-center text-white shadow-xl group-hover:scale-125 group-hover:shadow-2xl transition-all duration-500 ease-out relative overflow-hidden`}>
+                      <div className={`w-14 h-14 ${service.color} rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-500 ease-out relative overflow-hidden`}>
                         {service.icon}
-                        
                         <div className="absolute inset-0 bg-white/20 scale-0 group-hover:scale-100 transition-transform duration-500 rounded-full"></div>
                       </div>
                       
-                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3">
-                        <span className="text-law-gray-dark font-semibold text-xs sm:text-sm whitespace-nowrap group-hover:text-law-wine transition-colors duration-300">
+                      {/* TEXTO SEMPRE VISÍVEL - AJUSTADO PARA NÃO SOBREPOR */}
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2">
+                        <span className="text-law-gray-dark font-semibold text-xs whitespace-nowrap group-hover:text-law-wine transition-colors duration-300">
                           {service.name}
                         </span>
                       </div>
                       
-                      {/* Linha conectora */}
+                      {/* Linha conectora - MAIS SUTIL */}
                       <div 
-                        className="absolute w-0.5 bg-gradient-to-b from-law-gray-medium/40 to-transparent animate-in slide-in-from-bottom-2 duration-1000"
+                        className="absolute w-0.5 bg-gradient-to-b from-law-gray-medium/20 to-transparent animate-in slide-in-from-bottom-2 duration-1000"
                         style={{
-                          height: `${radius - 50}px`,
+                          height: `${radius - 45}px`,
                           left: '50%',
                           top: '50%',
                           transformOrigin: 'top center',
@@ -156,9 +156,9 @@ const InteractiveServicesWheel = () => {
             </div>
 
             {/* Texto de instrução */}
-            <div className="text-center pb-6 px-4 animate-in fade-in-0 duration-500 delay-1000">
-              <p className="text-law-gray-medium text-xs sm:text-sm">
-                Clique no X ou toque fora da área para fechar
+            <div className="text-center pb-4 px-4 animate-in fade-in-0 duration-500 delay-1000">
+              <p className="text-law-gray-medium text-xs">
+                Toque fora para fechar
               </p>
             </div>
           </div>
