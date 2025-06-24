@@ -5,6 +5,7 @@ import { Building2, Users, Home, Shield, MapPin, Handshake, Scale, X } from 'luc
 const InteractiveServicesWheel = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
 
   const services = [
     { name: 'Civil', icon: <Home className="h-6 w-6" />, color: 'bg-law-gold' },
@@ -22,14 +23,14 @@ const InteractiveServicesWheel = () => {
         const rect = areasSection.getBoundingClientRect();
         const windowHeight = window.innerHeight;
         
-        // Mostrar o ícone quando estivermos chegando ao final da seção (80% visível)
+        // Mostrar o ícone quando estivermos na metade da seção (50% visível)
         const sectionProgress = Math.max(0, Math.min(1, (windowHeight - rect.top) / rect.height));
-        setShowIcon(sectionProgress > 0.8);
+        setShowIcon(sectionProgress > 0.5);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initial position
+    handleScroll();
     
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -44,95 +45,112 @@ const InteractiveServicesWheel = () => {
 
   return (
     <>
-      {/* Ícone fixo da balança - aparece baseado no scroll */}
-      <div className={`fixed left-6 top-1/2 transform -translate-y-1/2 z-40 transition-all duration-700 ease-in-out ${
+      {/* Ícone fixo da balança */}
+      <div className={`fixed left-6 top-1/2 transform -translate-y-1/2 z-40 transition-all duration-1000 ease-out ${
         showIcon ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'
       }`}>
         <div
-          className="bg-law-wine hover:bg-law-wine/90 p-3 rounded-full shadow-lg cursor-pointer transition-all duration-500 hover:scale-110 group"
+          className="bg-law-wine hover:bg-law-wine/90 p-4 rounded-full shadow-2xl cursor-pointer transition-all duration-500 hover:scale-110 group relative"
           onClick={handleOpen}
-          onMouseEnter={handleOpen}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+          onTouchStart={() => setIsHovering(true)}
+          onTouchEnd={() => setIsHovering(false)}
         >
-          <Scale className="h-6 w-6 text-white" />
-          <div className="absolute left-full ml-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500">
-            <div className="bg-law-gray-dark text-white px-3 py-1 rounded text-sm whitespace-nowrap">
+          <Scale className="h-7 w-7 text-white" />
+          
+          {/* Tooltip com animação melhorada */}
+          <div className={`absolute left-full ml-4 top-1/2 transform -translate-y-1/2 pointer-events-none transition-all duration-500 ${
+            isHovering ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'
+          }`}>
+            <div className="bg-law-gray-dark text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap shadow-lg">
               Ver Serviços
             </div>
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-law-gray-dark rotate-45"></div>
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-3 h-3 bg-law-gray-dark rotate-45"></div>
           </div>
+
+          {/* Efeito de toque para mobile */}
+          <div className="absolute inset-0 rounded-full opacity-0 animate-ping bg-white/30 pointer-events-none group-active:opacity-100 md:hidden"></div>
+          
+          {/* Efeito de ondulação */}
+          <div className="absolute inset-0 rounded-full bg-white/10 scale-0 group-hover:scale-110 transition-transform duration-700 ease-out"></div>
         </div>
       </div>
 
-      {/* Overlay da roda */}
+      {/* Overlay da roda com animações melhoradas */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in-0 duration-700"
+          className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in-0 duration-500"
           onClick={handleClose}
         >
           <div 
-            className="relative bg-white rounded-2xl p-8 max-w-lg w-full animate-in zoom-in-95 duration-700 ease-out"
+            className="relative bg-white rounded-3xl p-10 max-w-lg w-full shadow-2xl animate-in zoom-in-90 slide-in-from-bottom-8 duration-700 ease-out"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Botão de fechar */}
+            {/* Botão de fechar melhorado */}
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-all duration-300 hover:scale-110 z-10"
+              className="absolute top-5 right-5 p-2 hover:bg-gray-100 rounded-full transition-all duration-300 hover:scale-110 hover:rotate-90 z-10 group"
             >
-              <X className="h-5 w-5 text-gray-500" />
+              <X className="h-6 w-6 text-gray-500 group-hover:text-law-wine transition-colors duration-300" />
             </button>
 
-            {/* Título */}
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-law-gray-dark mb-2">
+            {/* Título com animação */}
+            <div className="text-center mb-10 animate-in slide-in-from-top-4 duration-700 delay-200">
+              <h3 className="text-3xl font-bold text-law-gray-dark mb-3">
                 Nossos <span className="text-law-wine">Serviços</span>
               </h3>
-              <div className="w-16 h-1 bg-law-gold mx-auto"></div>
+              <div className="w-20 h-1 bg-law-gold mx-auto rounded-full"></div>
             </div>
 
-            {/* Roda de serviços */}
-            <div className="relative w-72 h-72 mx-auto">
-              {/* Centro da roda */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-law-gray-dark rounded-full flex items-center justify-center z-10 animate-in zoom-in-50 duration-1000 delay-300">
-                <Scale className="h-6 w-6 text-white" />
+            {/* Roda de serviços com animações escalonadas */}
+            <div className="relative w-80 h-80 mx-auto">
+              {/* Centro da roda com pulsação sutil */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-18 h-18 bg-law-gray-dark rounded-full flex items-center justify-center z-10 animate-in zoom-in-50 duration-1000 delay-500 shadow-lg">
+                <Scale className="h-7 w-7 text-white animate-pulse" />
               </div>
               
-              {/* Serviços ao redor */}
+              {/* Serviços ao redor com animações melhoradas */}
               {services.map((service, index) => {
                 const angle = (index * 60) - 90;
                 const radian = (angle * Math.PI) / 180;
-                const radius = 100;
+                const radius = 110;
                 const x = Math.cos(radian) * radius;
                 const y = Math.sin(radian) * radius;
                 
                 return (
                   <div
                     key={service.name}
-                    className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer animate-in zoom-in-50 duration-700"
+                    className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer animate-in zoom-in-50 slide-in-from-bottom-4 duration-700"
                     style={{
                       left: `calc(50% + ${x}px)`,
                       top: `calc(50% + ${y}px)`,
-                      animationDelay: `${(index * 100) + 500}ms`
+                      animationDelay: `${(index * 150) + 700}ms`
                     }}
                   >
-                    <div className={`w-12 h-12 ${service.color} rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-500`}>
-                      {React.cloneElement(service.icon, { className: "h-5 w-5" })}
+                    <div className={`w-14 h-14 ${service.color} rounded-full flex items-center justify-center text-white shadow-xl group-hover:scale-125 group-hover:shadow-2xl transition-all duration-500 ease-out relative overflow-hidden`}>
+                      {React.cloneElement(service.icon, { className: "h-6 w-6 relative z-10" })}
+                      
+                      {/* Efeito de brilho no hover */}
+                      <div className="absolute inset-0 bg-white/20 scale-0 group-hover:scale-100 transition-transform duration-500 rounded-full"></div>
                     </div>
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2">
-                      <span className="text-law-gray-dark font-semibold text-xs whitespace-nowrap">
+                    
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3">
+                      <span className="text-law-gray-dark font-semibold text-sm whitespace-nowrap group-hover:text-law-wine transition-colors duration-300">
                         {service.name}
                       </span>
                     </div>
                     
-                    {/* Linha conectora */}
+                    {/* Linha conectora com animação */}
                     <div 
-                      className="absolute w-0.5 bg-law-gray-medium/30 animate-in slide-in-from-bottom-2 duration-1000"
+                      className="absolute w-0.5 bg-gradient-to-b from-law-gray-medium/40 to-transparent animate-in slide-in-from-bottom-2 duration-1000"
                       style={{
-                        height: `${radius - 40}px`,
+                        height: `${radius - 45}px`,
                         left: '50%',
                         top: '50%',
                         transformOrigin: 'top center',
                         transform: `translateX(-50%) rotate(${angle + 180}deg)`,
-                        animationDelay: `${(index * 100) + 700}ms`
+                        animationDelay: `${(index * 150) + 900}ms`
                       }}
                     ></div>
                   </div>
@@ -140,9 +158,9 @@ const InteractiveServicesWheel = () => {
               })}
             </div>
 
-            <div className="text-center mt-6">
+            <div className="text-center mt-8 animate-in fade-in-0 duration-500 delay-1000">
               <p className="text-law-gray-medium text-sm">
-                Clique no X ou fora da área para fechar
+                Clique no X ou toque fora da área para fechar
               </p>
             </div>
           </div>
