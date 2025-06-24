@@ -105,9 +105,10 @@ const InteractiveServicesWheel = () => {
 
             {/* Roda de serviços com animações escalonadas */}
             <div className="relative w-80 h-80 mx-auto">
-              {/* Centro da roda com pulsação sutil */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-18 h-18 bg-law-gray-dark rounded-full flex items-center justify-center z-10 animate-in zoom-in-50 duration-1000 delay-500 shadow-lg">
-                <Scale className="h-7 w-7 text-white animate-pulse" />
+              {/* Centro da roda com ícone maior e mais bonito */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-br from-law-gray-dark to-law-wine rounded-full flex items-center justify-center z-10 animate-in zoom-in-50 duration-1000 delay-500 shadow-2xl border-4 border-law-gold/30">
+                <Scale className="h-10 w-10 text-law-gold animate-pulse drop-shadow-lg" strokeWidth={2.5} />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-transparent to-white/10"></div>
               </div>
               
               {/* Serviços ao redor com animações melhoradas */}
