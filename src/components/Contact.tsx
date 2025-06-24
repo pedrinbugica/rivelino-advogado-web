@@ -26,7 +26,7 @@ const Contact = () => {
   setIsSubmitting(true);
 
   try {
-    const response = await fetch("https://rivelino-backend.onrender.com", {
+    const response = await fetch("https://rivelino-backend.onrender.com/api", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -59,6 +59,7 @@ const Contact = () => {
     setIsSubmitting(false);
   }
 };
+
 
 
 
