@@ -46,7 +46,7 @@ const ServicesWheel = () => {
                   <div className={`w-16 h-16 ${service.color} rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                     {service.icon}
                   </div>
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                     <span className="text-law-gray-dark font-semibold text-sm whitespace-nowrap">
                       {service.name}
                     </span>
