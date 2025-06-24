@@ -41,7 +41,7 @@ const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          {/* Logo com fonte mais elegante */}
+          {/* Logo */}
           <div 
             className="flex items-center space-x-3 cursor-pointer"
             onClick={() => scrollToSection('home')}
@@ -50,20 +50,20 @@ const Header = () => {
               <Scale className="h-8 w-8 text-white" />
             </div>
             <div className="flex flex-col">
-              <h1 className={`text-2xl font-serif font-bold tracking-wide transition-colors ${
+              <h1 className={`text-2xl font-bold tracking-wide transition-colors ${
                 isScrolled ? 'text-law-gray-dark' : 'text-white'
-              }`} style={{ fontFamily: 'Playfair Display, serif' }}>
+              }`}>
                 RJB & RJB
               </h1>
               <span className={`text-sm font-medium tracking-widest uppercase transition-colors ${
                 isScrolled ? 'text-law-wine' : 'text-law-gold'
-              }`} style={{ fontFamily: 'Playfair Display, serif', letterSpacing: '0.15em' }}>
+              }`}>
                 Advogados
               </span>
             </div>
           </div>
 
-          {/* Desktop Navigation com fonte elegante */}
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {menuItems.map((item) => (
               <button
@@ -72,7 +72,6 @@ const Header = () => {
                 className={`font-medium tracking-wide transition-colors hover:text-law-gold ${
                   isScrolled ? 'text-law-gray-dark' : 'text-white'
                 }`}
-                style={{ fontFamily: 'Playfair Display, serif' }}
               >
                 {item.name}
               </button>
@@ -101,7 +100,6 @@ const Header = () => {
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
                   className="text-left px-6 py-3 text-law-gray-dark hover:bg-law-gray-light hover:text-law-wine transition-colors font-medium tracking-wide"
-                  style={{ fontFamily: 'Playfair Display, serif' }}
                 >
                   {item.name}
                 </button>
