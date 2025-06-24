@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const Contact = () => {
   const { toast } = useToast();
@@ -22,46 +22,40 @@ const Contact = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+    e.preventDefault();
+    setIsSubmitting(true);
 
-  try {
-    const response = await fetch("https://rivelino-backend.onrender.com/api/form", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(formData)
-    });
+    try {
+      const { data, error } = await supabase.functions.invoke('contact-form', {
+        body: formData
+      });
 
-    if (!response.ok) {
-      throw new Error("Erro ao enviar formulário");
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Mensagem enviada com sucesso!",
+        description: "Entraremos em contato em breve.",
+      });
+
+      setFormData({
+        nome: '',
+        email: '',
+        telefone: '',
+        mensagem: ''
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Erro ao enviar mensagem",
+        description: "Tente novamente ou entre em contato por telefone.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    toast({
-      title: "Mensagem enviada com sucesso!",
-      description: "Entraremos em contato em breve.",
-    });
-
-    setFormData({
-      nome: '',
-      email: '',
-      telefone: '',
-      mensagem: ''
-    });
-  } catch (error) {
-    toast({
-      title: "Erro ao enviar mensagem",
-      description: "Tente novamente ou entre em contato por telefone.",
-      variant: "destructive",
-    });
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
-
-
+  };
 
   const contactInfo = [
     {
