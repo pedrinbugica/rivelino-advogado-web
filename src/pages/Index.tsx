@@ -3,8 +3,8 @@ import React from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
-import Areas from '@/components/Areas';
-import Services from '@/components/Services';
+import AreasServices from '@/components/AreasServices';
+import ServicesWheel from '@/components/ServicesWheel';
 import Contact from '@/components/Contact';
 import Map from '@/components/Map';
 import Footer from '@/components/Footer';
@@ -15,8 +15,8 @@ const Index = () => {
       <Header />
       <Hero />
       <About />
-      <Areas />
-      <Services />
+      <AreasServices />
+      <ServicesWheel />
       <Contact />
       <Map />
       <Footer />

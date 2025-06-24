@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Scale, Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { Scale, Phone, Mail, MapPin, Clock, Instagram } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -51,7 +51,6 @@ const Footer = () => {
                 { name: 'Início', id: 'home' },
                 { name: 'Sobre', id: 'about' },
                 { name: 'Áreas de Atuação', id: 'areas' },
-                { name: 'Serviços', id: 'services' },
                 { name: 'Contato', id: 'contact' },
               ].map((item) => (
                 <li key={item.id}>
@@ -115,10 +114,19 @@ const Footer = () => {
               © {currentYear} RJB & RJB Advogado. Todos os direitos reservados.
             </p>
             
-            <div className="text-white/60 text-sm">
-              <p>
-                Desenvolvido com excelência para oferecer a melhor experiência jurídica.
+            <div className="text-white/60 text-sm text-center md:text-right">
+              <p className="mb-2">
+                Site desenvolvido por Pedro Henrique Bugica.
               </p>
+              <a 
+                href="https://instagram.com/pedro.bugica" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-2 text-law-gold hover:text-law-gold/80 transition-colors"
+              >
+                <Instagram className="h-4 w-4" />
+                <span>@pedro.bugica</span>
+              </a>
             </div>
           </div>
         </div>
