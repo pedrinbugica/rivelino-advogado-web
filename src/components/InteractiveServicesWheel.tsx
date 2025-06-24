@@ -81,14 +81,14 @@ const InteractiveServicesWheel = () => {
         </div>
       </div>
 
-      {/* Overlay da roda - VISUAL MODERNIZADO */}
+      {/* Overlay da roda - LAYOUT COMPLETAMENTE CORRIGIDO */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in-0 duration-500"
           onClick={handleClose}
         >
           <div 
-            className="relative bg-gradient-to-br from-white/95 to-white/90 backdrop-blur-xl rounded-3xl w-full max-w-[320px] sm:max-w-[350px] h-fit shadow-2xl animate-in zoom-in-90 slide-in-from-bottom-8 duration-700 ease-out overflow-hidden flex flex-col border border-white/30"
+            className="relative bg-gradient-to-br from-white/95 to-white/90 backdrop-blur-xl rounded-3xl w-full max-w-[360px] sm:max-w-[400px] h-fit shadow-2xl animate-in zoom-in-90 slide-in-from-bottom-8 duration-700 ease-out overflow-hidden flex flex-col border border-white/30"
             onClick={(e) => e.stopPropagation()}
             style={{ filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15))' }}
           >
@@ -108,29 +108,41 @@ const InteractiveServicesWheel = () => {
               <div className="w-16 h-1 bg-gradient-to-r from-law-wine to-law-gold mx-auto rounded-full shadow-sm"></div>
             </div>
 
-            {/* Container da roda - LAYOUT CORRIGIDO */}
-            <div className="flex-1 flex items-center justify-center px-4 py-6">
-              <div className="relative w-[240px] h-[240px] sm:w-[260px] sm:h-[260px]">
-                {/* Centro da roda - PERFEITAMENTE CENTRALIZADO */}
-                <div className="absolute w-16 h-16 bg-gradient-to-br from-white to-gray-50 backdrop-blur-sm rounded-full flex items-center justify-center z-10 animate-in zoom-in-50 duration-1000 delay-500 shadow-lg border-2 border-law-gold/30"
-                     style={{
-                       left: '50%',
-                       top: '50%',
-                       transform: 'translate(-50%, -50%)'
-                     }}>
+            {/* Container da roda - MATEMÁTICA CORRIGIDA */}
+            <div className="flex-1 flex items-center justify-center px-6 py-8">
+              <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px]">
+                {/* Centro da roda - CENTRALIZAÇÃO PERFEITA */}
+                <div 
+                  className="absolute w-16 h-16 bg-gradient-to-br from-white to-gray-50 backdrop-blur-sm rounded-full flex items-center justify-center z-10 animate-in zoom-in-50 duration-1000 delay-500 shadow-lg border-2 border-law-gold/30"
+                  style={{
+                    left: '50%',
+                    top: '50%',
+                    marginLeft: '-32px', // -w-16/2
+                    marginTop: '-32px'   // -h-16/2
+                  }}
+                >
                   <Scale className="h-8 w-8 text-law-wine animate-pulse" />
                   
                   {/* Efeito glow no centro */}
                   <div className="absolute inset-0 rounded-full bg-gradient-to-br from-law-gold/20 to-law-wine/20 animate-pulse"></div>
                 </div>
                 
-                {/* Serviços ao redor - POSICIONAMENTO CORRIGIDO */}
+                {/* Serviços ao redor - POSICIONAMENTO MATEMÁTICO CORRIGIDO */}
                 {services.map((service, index) => {
-                  const angle = (index * 60) - 90;
+                  // Começar do topo e distribuir uniformemente
+                  const angle = (index * 60) - 90; // 360/6 = 60 graus, começar no topo (-90°)
                   const radian = (angle * Math.PI) / 180;
-                  const radius = 80; // Aumentado para dar mais espaço
+                  const radius = 110; // Raio aumentado para evitar sobreposições
+                  
+                  // Calcular posição exata
                   const x = Math.cos(radian) * radius;
                   const y = Math.sin(radian) * radius;
+                  
+                  // Determinar posição do label baseado no quadrante
+                  const isTop = y < -20;
+                  const isBottom = y > 20;
+                  const isLeft = x < -20;
+                  const isRight = x > 20;
                   
                   return (
                     <div
@@ -139,7 +151,8 @@ const InteractiveServicesWheel = () => {
                       style={{
                         left: '50%',
                         top: '50%',
-                        transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+                        marginLeft: `${x - 24}px`, // -w-12/2
+                        marginTop: `${y - 24}px`,  // -h-12/2
                         animationDelay: `${(index * 150) + 700}ms`
                       }}
                     >
@@ -155,26 +168,33 @@ const InteractiveServicesWheel = () => {
                              style={{ boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.3)' }}></div>
                       </div>
                       
-                      {/* Nome do serviço - POSICIONAMENTO MELHORADO */}
-                      <div className="absolute left-1/2 transform -translate-x-1/2 whitespace-nowrap"
-                           style={{
-                             top: index % 2 === 0 ? (index < 3 ? '-28px' : '52px') : (y > 0 ? '52px' : '-28px')
-                           }}>
-                        <span className="text-law-gray-dark font-semibold text-xs group-hover:text-law-wine group-hover:scale-105 transition-all duration-300 text-center block drop-shadow-sm bg-white/80 px-2 py-1 rounded-md">
+                      {/* Nome do serviço - POSICIONAMENTO INTELIGENTE */}
+                      <div 
+                        className="absolute whitespace-nowrap pointer-events-none"
+                        style={{
+                          left: '50%',
+                          top: isTop ? '-32px' : isBottom ? '56px' : '50%',
+                          transform: isTop || isBottom 
+                            ? 'translateX(-50%)' 
+                            : `translateX(${isLeft ? '-100%' : '24px'}) translateY(-50%)`
+                        }}
+                      >
+                        <span className="text-law-gray-dark font-semibold text-xs group-hover:text-law-wine group-hover:scale-105 transition-all duration-300 text-center block drop-shadow-sm bg-white/90 px-2 py-1 rounded-md shadow-sm border border-white/50">
                           {service.name}
                         </span>
                       </div>
                       
-                      {/* Linha conectora com gradiente - CORRIGIDA */}
+                      {/* Linha conectora - CENTRALIZAÇÃO CORRIGIDA */}
                       <div 
-                        className="absolute bg-gradient-to-b from-law-gold/30 via-law-wine/20 to-transparent animate-in slide-in-from-bottom-2 duration-1000"
+                        className="absolute bg-gradient-to-b from-law-gold/40 via-law-wine/20 to-transparent animate-in slide-in-from-bottom-2 duration-1000"
                         style={{
-                          width: '1px',
-                          height: `${radius - 32}px`,
+                          width: '2px',
+                          height: `${radius - 40}px`,
                           left: '50%',
                           top: '50%',
+                          marginLeft: '-1px',
                           transformOrigin: 'top center',
-                          transform: `translateX(-50%) rotate(${angle + 180}deg)`,
+                          transform: `rotate(${angle + 180}deg)`,
                           animationDelay: `${(index * 150) + 900}ms`
                         }}
                       ></div>
