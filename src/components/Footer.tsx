@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Scale, Phone, Mail, MapPin, Clock, Instagram } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Instagram } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -19,10 +19,18 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-law-gold p-2 rounded-lg">
-                <Scale className="h-8 w-8 text-white" />
-              </div>
-              <div>
+              <img 
+                src="/lovable-uploads/logo-rivelino.png" 
+                alt="RJB & RJB Advogados" 
+                className="h-16 w-auto"
+                onError={(e) => {
+                  // Fallback para caso a imagem não carregue
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.nextElementSibling?.classList.remove('hidden');
+                }}
+              />
+              <div className="hidden">
                 <h3 className="text-2xl font-bold">RJB & RJB</h3>
                 <span className="text-law-gold">Advogado</span>
               </div>

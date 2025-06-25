@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Scale } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,20 +46,32 @@ const Header = () => {
             className="flex items-center space-x-3 cursor-pointer"
             onClick={() => scrollToSection('home')}
           >
-            <div className="bg-law-gold p-2 rounded-lg">
-              <Scale className="h-8 w-8 text-white" />
-            </div>
-            <div className="flex flex-col">
-              <h1 className={`text-2xl font-bold tracking-wide transition-colors ${
-                isScrolled ? 'text-law-gray-dark' : 'text-white'
-              }`}>
-                RJB & RJB
-              </h1>
-              <span className={`text-sm font-medium tracking-widest uppercase transition-colors ${
-                isScrolled ? 'text-law-wine' : 'text-law-gold'
-              }`}>
-                Advogados
-              </span>
+            <div className="flex items-center space-x-3">
+              <img 
+                src="/lovable-uploads/logo-rivelino.png" 
+                alt="RJB & RJB Advogados" 
+                className="h-12 w-auto"
+                onError={(e) => {
+                  // Fallback para caso a imagem não carregue
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.nextElementSibling?.classList.remove('hidden');
+                }}
+              />
+              <div className="hidden">
+                <div className="flex flex-col">
+                  <h1 className={`text-2xl font-bold tracking-wide transition-colors ${
+                    isScrolled ? 'text-law-gray-dark' : 'text-white'
+                  }`}>
+                    RJB & RJB
+                  </h1>
+                  <span className={`text-sm font-medium tracking-widest uppercase transition-colors ${
+                    isScrolled ? 'text-law-wine' : 'text-law-gold'
+                  }`}>
+                    Advogados
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
