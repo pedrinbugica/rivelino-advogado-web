@@ -154,4 +154,3 @@ const InteractiveServicesWheel = () => {
 };
 
 export default InteractiveServicesWheel;
-
