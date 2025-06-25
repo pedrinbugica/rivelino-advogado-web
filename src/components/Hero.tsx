@@ -34,7 +34,7 @@ const Hero = () => {
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12">
             <div className="flex items-center text-white/80 font-merriweather">
               <MapPin className="h-5 w-5 mr-2 text-law-gold" />
-              <span>OAB/PR 15100</span>
+              <span>OAB/PR 115.100</span>
             </div>
             <div className="flex items-center text-white/80 font-merriweather">
               <Phone className="h-5 w-5 mr-2 text-law-gold" />
