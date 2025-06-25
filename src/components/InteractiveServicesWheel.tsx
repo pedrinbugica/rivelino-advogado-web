@@ -146,7 +146,7 @@ const InteractiveServicesWheel = () => {
                         <p className="text-sm text-law-gray-dark">{service.details}</p>
                         <div className="pt-2">
                           <span className="text-xs text-law-gold font-medium">
-                            💡 Clique para saber mais
+                            Clique para saber mais
                           </span>
                         </div>
                       </div>
