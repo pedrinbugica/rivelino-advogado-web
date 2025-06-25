@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { CheckCircle, FileText, Users, Scale, Home, Handshake } from 'lucide-react';
+import InteractiveServicesWheel from './InteractiveServicesWheel';
 
 const Services = () => {
   const services = [
@@ -37,7 +38,10 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-20 bg-gradient-to-br from-law-gray-dark to-law-wine">
+    <section id="services" className="py-20 bg-gradient-to-br from-law-gray-dark to-law-wine relative">
+      {/* Roda interativa de serviços */}
+      <InteractiveServicesWheel />
+      
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
