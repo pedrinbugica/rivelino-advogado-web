@@ -25,12 +25,17 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    console.log('Submitting form with data:', formData);
+
     try {
       const { data, error } = await supabase.functions.invoke('contact-form', {
         body: formData
       });
 
+      console.log('Supabase response:', { data, error });
+
       if (error) {
+        console.error('Supabase function error:', error);
         throw error;
       }
 
