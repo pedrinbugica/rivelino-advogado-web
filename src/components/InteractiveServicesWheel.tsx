@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Building2, Users, Home, Shield, MapPin, Handshake, Scale } from 'lucide-react';
 import {
@@ -11,6 +11,29 @@ import {
 const InteractiveServicesWheel = () => {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.3, // Aparece quando 30% da seção está visível
+      }
+    );
+
+    const areasSection = document.getElementById('areas');
+    if (areasSection) {
+      observer.observe(areasSection);
+    }
+
+    return () => {
+      if (areasSection) {
+        observer.unobserve(areasSection);
+      }
+    };
+  }, []);
 
   const services = [
     { 
@@ -66,6 +89,10 @@ const InteractiveServicesWheel = () => {
   const handleServiceClick = (route: string) => {
     navigate(`/servico/${route}`);
   };
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-8 left-8 z-50">
