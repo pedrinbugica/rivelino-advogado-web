@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -139,7 +140,7 @@ const Contact = () => {
               {/* OAB Information */}
               <div className="mt-8 p-6 bg-law-wine/10 rounded-lg border-l-4 border-law-wine">
                 <h4 className="font-bold text-law-wine mb-2">Registro OAB</h4>
-                <p className="text-law-gray-dark">OAB/PR 15100</p>
+                <p className="text-law-gray-dark">OAB/PR 115.100</p>
               </div>
             </div>
 

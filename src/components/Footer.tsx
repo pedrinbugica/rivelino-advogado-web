@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Phone, Mail, MapPin, Clock, Instagram } from 'lucide-react';
 
@@ -43,7 +42,7 @@ const Footer = () => {
             
             <div className="text-white/60">
               <p className="mb-2">
-                <strong>OAB/PR:</strong> 15100
+                <strong>OAB/PR:</strong> 115.100
               </p>
               <p>
                 Dr. Rivelino - Advogado regularmente inscrito na OAB
