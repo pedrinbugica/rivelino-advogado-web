@@ -19,7 +19,7 @@ const InteractiveServicesWheel = () => {
         setIsVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.3, // Aparece quando 30% da seção está visível
+        threshold: 0.3,
       }
     );
 
