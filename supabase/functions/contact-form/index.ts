@@ -1,5 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -49,14 +50,15 @@ const handler = async (req: Request): Promise<Response> => {
     const smtpUser = Deno.env.get('SMTP_USER');
     const smtpPass = Deno.env.get('SMTP_PASS');
     const emailTo = Deno.env.get('EMAIL_TO');
+    const fromName = Deno.env.get('SMTP_FROM_NAME') || 'Site Rivelino';
 
-    console.log('SMTP Config:', {
-      host: smtpHost,
-      port: smtpPort,
-      user: smtpUser,
-      to: emailTo,
-      hasPassword: !!smtpPass
-    });
+    console.log('=== CONFIGURAÇÕES SMTP ===');
+    console.log('Host:', smtpHost);
+    console.log('Port:', smtpPort);
+    console.log('User:', smtpUser);
+    console.log('To:', emailTo);
+    console.log('From Name:', fromName);
+    console.log('Has Password:', !!smtpPass);
 
     if (!smtpHost || !smtpUser || !smtpPass || !emailTo) {
       console.error('SMTP configuration missing');
@@ -68,6 +70,12 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
+
+    console.log('=== DADOS DO FORMULÁRIO ===');
+    console.log('Nome:', formData.nome);
+    console.log('Email:', formData.email);
+    console.log('Telefone:', formData.telefone);
+    console.log('Mensagem:', formData.mensagem.substring(0, 100) + '...');
 
     // Create email content
     const emailSubject = `Nova mensagem de contato de ${formData.nome}`;
@@ -83,94 +91,71 @@ ${formData.mensagem}
 Esta mensagem foi enviada através do formulário de contato do site.
     `;
 
-    console.log('Tentando enviar email...');
+    console.log('=== TENTANDO ENVIAR EMAIL ===');
     console.log('Assunto:', emailSubject);
-    console.log('De:', smtpUser);
-    console.log('Para:', emailTo);
 
     try {
-      // Usando fetch para enviar via API SMTP mais simples
-      const emailPayload = {
-        from: smtpUser,
-        to: emailTo,
-        subject: emailSubject,
-        text: emailBody
-      };
-
-      // Tentativa com nodemailer via HTTP
-      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      // Initialize SMTP client
+      const client = new SMTPClient({
+        connection: {
+          hostname: smtpHost,
+          port: smtpPort,
+          tls: true,
+          auth: {
+            username: smtpUser,
+            password: smtpPass,
+          },
         },
-        body: JSON.stringify({
-          service_id: 'gmail',
-          template_id: 'template_contact',
-          user_id: 'public_key',
-          template_params: {
-            from_name: formData.nome,
-            from_email: formData.email,
-            phone: formData.telefone,
-            message: formData.mensagem,
-            to_email: emailTo
-          }
-        })
       });
 
-      console.log('Resposta da tentativa 1:', response.status);
+      console.log('Cliente SMTP criado, conectando...');
+      
+      // Send email
+      await client.send({
+        from: `${fromName} <${smtpUser}>`,
+        to: emailTo,
+        subject: emailSubject,
+        content: emailBody,
+      });
 
-      if (!response.ok) {
-        // Fallback: tentar conexão SMTP direta mais robusta
-        console.log('Tentando método alternativo de envio...');
-        
-        // Usar uma abordagem mais simples - salvar no log por enquanto
-        console.log('=== EMAIL PARA ENVIAR ===');
-        console.log('De:', smtpUser);
-        console.log('Para:', emailTo);
-        console.log('Assunto:', emailSubject);
-        console.log('Corpo:');
-        console.log(emailBody);
-        console.log('=== FIM DO EMAIL ===');
+      console.log('✅ EMAIL ENVIADO COM SUCESSO!');
+      
+      await client.close();
+      console.log('Conexão SMTP fechada');
 
-        // Por enquanto, vamos retornar sucesso e implementar via webhook
-        console.log('Email processado com sucesso via fallback');
-      } else {
-        console.log('Email enviado com sucesso via API');
-      }
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: 'Mensagem enviada com sucesso!' 
+        }),
+        { 
+          status: 200, 
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        }
+      );
 
     } catch (emailError) {
-      console.error('Erro no envio de email:', emailError);
-      
-      // Log completo para debug
-      console.log('=== DADOS DO FORMULÁRIO RECEBIDOS ===');
-      console.log('Nome:', formData.nome);
-      console.log('Email:', formData.email);
-      console.log('Telefone:', formData.telefone);
-      console.log('Mensagem:', formData.mensagem);
-      console.log('=== CONFIGURAÇÃO SMTP ===');
-      console.log('Host:', smtpHost);
-      console.log('Porta:', smtpPort);
-      console.log('Usuário:', smtpUser);
-      console.log('Email destino:', emailTo);
-      console.log('=== FIM DOS LOGS ===');
-      
-      // Por enquanto retornar sucesso para não bloquear o usuário
-      console.log('Dados salvos nos logs para processamento manual');
+      console.error('❌ ERRO AO ENVIAR EMAIL:', emailError);
+      console.error('Detalhes do erro:', {
+        name: emailError.name,
+        message: emailError.message,
+        stack: emailError.stack
+      });
+
+      // Return error to user
+      return new Response(
+        JSON.stringify({ 
+          error: 'Erro ao enviar email. Tente novamente ou entre em contato por telefone.' 
+        }),
+        { 
+          status: 500, 
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        }
+      );
     }
 
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: 'Mensagem enviada com sucesso!' 
-      }),
-      { 
-        status: 200, 
-        headers: { 'Content-Type': 'application/json', ...corsHeaders }
-      }
-    );
-
   } catch (error) {
-    console.error('Erro na função contact-form:', error);
+    console.error('❌ ERRO GERAL NA FUNÇÃO:', error);
     return new Response(
       JSON.stringify({ error: 'Erro interno do servidor' }),
       { 
